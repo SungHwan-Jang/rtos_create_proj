@@ -22,12 +22,13 @@ typedef struct KernelTcb_t
     /* data */
     uint32_t sp;
     uint8_t* stack_base;
+    uint32_t priority;
 }KernelTcb_t;
 // stack infomation - sp is in general register stack pointer. stack_base is indivisual stack addr
 
 typedef void(*KernelTaskFunc_t)(void);
 
 void kernel_task_init(void); // init kernel task function
-uint32_t kernel_task_create(KernelTaskFunc_t startFunc); // register kernel task
+uint32_t kernel_task_create(KernelTaskFunc_t startFunc, uint32_t priority); // register kernel task
 
 #endif

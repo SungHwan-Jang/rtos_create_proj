@@ -88,13 +88,13 @@ static void kernel_init(void){
 
     kernel_init();
 
-    taskId = kernel_task_create(user_task0);
+    taskId = kernel_task_create(user_task0, 0);
 
     if(taskId == NOT_ENOUGH_TASK_NUM){
         trace("task0 creation fail\n");
     }
 
-    taskId = kernel_task_create(user_task1);
+    taskId = kernel_task_create(user_task1, 1);
 
     if(taskId == NOT_ENOUGH_TASK_NUM){
         trace("task0 creation fail\n");
