@@ -44,7 +44,8 @@ navilos_bin = build/navilos.bin
 all: $(navilos)
 
 clean:
-	@rm -fr build
+	@echo clean all build/*.* 
+	@rm -rf build
 	
 run: $(navilos)
 	qemu-system-arm -M realview-pb-a8 -kernel $(navilos) -nographic
