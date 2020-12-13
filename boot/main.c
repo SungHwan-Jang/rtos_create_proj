@@ -5,7 +5,6 @@
 #include "hal_uart.h"
 #include "hal_interrupt.h"
 #include "hal_timer.h"
-#include "task.h"
 #include "kernel.h"
 
 void user_task0(void);
@@ -31,7 +30,9 @@ void main(void)
     putstr("hello world!!\n");
 
     printf_test();
-    timer_test();
+    
+    //timer_test();
+    kernel_init();
 
     while(true);
 
@@ -67,19 +68,20 @@ static void printf_test(void)
 }
 
 static void timer_test(void){
-    while(true){
+    uint32_t i =0;
+    for(i=0; i<5; i++){
         trace("currnet count : %u\n", hal_timer_get_1ms_counter());
         delay(1000);
     }
 }
 
 void user_task0(void){
-    
+
     uint32_t local = 0;
 
-    
+   
     while(true){
-
+        delay(1000);
         trace("user task0 \n");
         trace("user task #0 SP=0x%x\n", &local);
         kernel_yield();
@@ -90,9 +92,8 @@ void user_task1(void){
 
     uint32_t local = 0;
 
-    
     while(true){
-
+        delay(1000);
         trace("user task1 \n");
         trace("user task #1 SP=0x%x\n", &local);
         kernel_yield();
@@ -103,7 +104,9 @@ void user_task1(void){
 static void kernel_init(void){
     uint32_t taskId;
 
-    kernel_init();
+    kernel_task_init();
+
+    trace("kernel task init\n");
 
     taskId = kernel_task_create(user_task0, 0);
 

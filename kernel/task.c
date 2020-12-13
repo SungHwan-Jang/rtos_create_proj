@@ -3,6 +3,8 @@
 #include "stdbool.h"
 
 #include "ARMv7AR.h"
+#include "armcpu.h"
+#include "task.h"
 
 static KernelTcb_t sTask_list[MAX_TASK_NUM];
 static KernelTcb_t* sCurrent_tcb;
@@ -13,7 +15,6 @@ static uint32_t sCurrent_tcb_index;
 
 static KernelTcb_t* scheduler_round_robin_algorithm(void);
 static KernelTcb_t* scheduler_priority_algorithm(void);
-static __attribute__ ((naked)) void kernel_task_context_switching(void);
 static __attribute__ ((naked)) void save_context(void);
 static __attribute__ ((naked)) void restore_context(void);
 
@@ -57,8 +58,6 @@ uint32_t kernel_task_create(KernelTaskFunc_t startFunc, uint32_t priority){
     return (sAllocated_tcb_index - 1);
 } //register kernel task
 
-
-
 void kernel_task_scheduler(void){
 
     sCurrent_tcb = &sTask_list[sCurrent_tcb_index];
@@ -68,13 +67,13 @@ void kernel_task_scheduler(void){
 }
 
 void kernel_task_start(void){
-    
+
     sNext_tcb = &sTask_list[sCurrent_tcb_index];
     restore_context();
 }
 
 //if define __attribute__ ((naked)) , do not automatically generate stack backup/restore/return adding func related ASM . only inner code exist.
-static __attribute__ ((naked)) void kernel_task_context_switching(void){
+__attribute__ ((naked)) void kernel_task_context_switching(void){
     __asm__ ("B save_context");
     __asm__ ("B restore_context"); // B ASM means that no change LR.
 }
