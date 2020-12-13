@@ -68,7 +68,9 @@ void kernel_task_scheduler(void){
 }
 
 void kernel_task_start(void){
-
+    
+    sNext_tcb = &sTask_list[sCurrent_tcb_index];
+    restore_context();
 }
 
 //if define __attribute__ ((naked)) , do not automatically generate stack backup/restore/return adding func related ASM . only inner code exist.

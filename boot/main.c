@@ -6,6 +6,7 @@
 #include "hal_interrupt.h"
 #include "hal_timer.h"
 #include "task.h"
+#include "kernel.h"
 
 void user_task0(void);
 void user_task1(void);
@@ -73,13 +74,29 @@ static void timer_test(void){
 }
 
 void user_task0(void){
-    trace("user task0 \n");
-    while(true);
+    
+    uint32_t local = 0;
+
+    
+    while(true){
+
+        trace("user task0 \n");
+        trace("user task #0 SP=0x%x\n", &local);
+        kernel_yield();
+    }
 }
 
 void user_task1(void){
-    trace("user task1 \n");
-    while(true);
+
+    uint32_t local = 0;
+
+    
+    while(true){
+
+        trace("user task1 \n");
+        trace("user task #1 SP=0x%x\n", &local);
+        kernel_yield();
+    }
 }
 
 
@@ -99,4 +116,6 @@ static void kernel_init(void){
     if(taskId == NOT_ENOUGH_TASK_NUM){
         trace("task0 creation fail\n");
     }
+
+    kernel_start();
 }
